@@ -3,13 +3,18 @@ import React, { useMemo, useState } from 'react';
 import { FlexItem } from '../components/layout';
 import { TestnetToast } from '../components/toasts';
 import { web3Provider } from '../handlers/web3';
+import ENSConfirmRegisterSheet from '../screens/ENSConfirmRegisterSheet';
 import ProfileScreen from '../screens/ProfileScreen';
 import QRScannerScreen from '../screens/QRScannerScreen';
 import WalletScreen from '../screens/WalletScreen';
 import { deviceUtils } from '../utils';
 import ScrollPagerWrapper from './ScrollPagerWrapper';
 import Routes from './routesNames';
-import { useAccountSettings, useCoinListEdited } from '@rainbow-me/hooks';
+import {
+  useAccountSettings,
+  useCoinListEdited,
+  useHideSplashScreen,
+} from '@rainbow-me/hooks';
 
 const Swipe = createMaterialTopTabNavigator();
 
@@ -25,15 +30,21 @@ export function SwipeNavigator() {
   const [swipeEnabled, setSwipeEnabled] = useState(true);
   const params = useMemo(() => ({ setSwipeEnabled }), []);
 
+  useHideSplashScreen();
+
   return (
     <FlexItem>
       <Swipe.Navigator
         initialLayout={deviceUtils.dimensions}
-        initialRouteName={Routes.WALLET_SCREEN}
+        initialRouteName={Routes.PROFILE_SCREEN}
         pager={renderPager}
         swipeEnabled={swipeEnabled && !isCoinListEdited}
         tabBar={renderTabBar}
       >
+        {/* <Swipe.Screen
+          component={ENSConfirmRegisterSheet}
+          name={Routes.ENS_CONFIRM_REGISTER_SHEET}
+        /> */}
         <Swipe.Screen component={ProfileScreen} name={Routes.PROFILE_SCREEN} />
         <Swipe.Screen component={WalletScreen} name={Routes.WALLET_SCREEN} />
         <Swipe.Screen
